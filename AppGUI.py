@@ -2,7 +2,7 @@ import tkinter
 import functionChartWindow
 import matplotlib
 
-equations = ["y' = y - x^2, y(0) = 1", "y' = e^(-2x) - 2y, y(0) = 0.1", ]
+equations = ["y' = y - x^2, y(0) = 1", "y' = e^(-2x) - 2y, y(0) = 0.1", "y' = sn(x), y(pi/2) = 0", "y' = -(y^2/x), y(1) = 1"]
 
 root = tkinter.Tk()
 root.geometry('450x500')
@@ -26,18 +26,16 @@ def toggleNumberOfStepsSpinnerStatus(spinner):
 
 
 def initApp():
-
-
-    var = tkinter.IntVar()
+    varWhich = tkinter.IntVar()
     varLength = tkinter.StringVar()
     varAmount = tkinter.StringVar()
     varIsInf = tkinter.IntVar()
+
     for i, equation in enumerate(equations):
-        e = tkinter.Radiobutton(root, text=equation, variable=var, value=i)
+        e = tkinter.Radiobutton(root, text=equation, variable=varWhich, value=i)
         e.pack()
 
-    subimtBtn = tkinter.Button(root, text="Select equation", command=lambda: runChartWindow(var, varLength, varAmount, varIsInf))
-    subimtBtn.pack(side=tkinter.BOTTOM, pady=20)
+
 
 
     firstLine = tkinter.Frame(root)
@@ -54,5 +52,8 @@ def initApp():
     stepAmountCheckBox.pack(side=tkinter.LEFT, padx=10, expand=True)
     secondLine.pack(side=tkinter.TOP)
 
+    subimtBtn = tkinter.Button(root, text="Select equation",
+                               command=lambda: runChartWindow(varWhich, varLength, varAmount, varIsInf))
+    subimtBtn.pack(side=tkinter.BOTTOM, pady=20)
 
     root.mainloop()
