@@ -9,7 +9,7 @@ root.geometry('300x400')
 root.title("Select equation")
 
 def runChartWindow(whichEquation):
-    functionChartWindow.openNewChart(root, whichEquation)
+    functionChartWindow.openNewChart(root, whichEquation.get())
 
 
 def initApp():
