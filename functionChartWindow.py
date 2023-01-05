@@ -5,15 +5,15 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg)
 import numpy as np
-from screeninfo import get_monitors
 
 import AppGUI
 import functions
 
+
 delay = 400#miliseconds
 
 
-def updatePlot(ax, X, FX, canvas, window, i, stepAmount, runga_step):
+def updatePlot(ax, X, FX, canvas, window, i, stepAmount, runga_step, hLabel):
     if(runga_step<=0.001):
         return
     X = functions.conditions[i][0]  # waruenk poczatkowy
@@ -27,19 +27,19 @@ def updatePlot(ax, X, FX, canvas, window, i, stepAmount, runga_step):
     runga_y = calculate_runge_kutta(runga_step, i, stepAmount, X, FX)[1]
 
     ax.clear()
-    ax.set_title("Solution: " + AppGUI.equations[i])
+    ax.set_title("Solution of " + AppGUI.equations[i])
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    ax.scatter(runga_x, runga_y, color='r')
-    ax.plot(sol_x, sol_y, color='g')
+    ax.scatter(runga_x, runga_y, color='r', label='Values from Runge-Kutta method')
+    ax.plot(sol_x, sol_y, color='g', label='Real values')
     ax.set_ylim([-5, 5])
     runga_step/=1.25
-
-    print("licze")
-
-
+    hLabel.config(text="Length of the step (h): " + str(runga_step))
+    ax.legend()
     canvas.draw()
-    window.after(delay, lambda: updatePlot(ax, X, FX, canvas, window, i,stepAmount,runga_step))
+
+
+    window.after(delay, lambda: updatePlot(ax, X, FX, canvas, window, i,stepAmount,runga_step, hLabel))
 
 
 def rungeKuttaMethod(x, y, h, i):
@@ -85,19 +85,19 @@ def openNewChart(root, i, stepAmount,runga_step):
     # h = float(h)
     stepAmount = int(stepAmount)
     newWindow = tkinter.Toplevel(root)
-
-
-
     newWindow.geometry("1280x720")
     newWindow.title("Chart")
+
+    hLabel = tkinter.Label(newWindow)
+    hLabel.pack(side='bottom')
+
+
+
     screen_width = root.winfo_screenmmwidth()//10
     screen_height = root.winfo_screenmmheight()//10
 
     screen_height//=1.5
     screen_width//=1.5
-
-    print(screen_width)
-    print(screen_height)
 
 
     X = functions.conditions[i][0]#waruenk poczatkowy
@@ -119,11 +119,12 @@ def openNewChart(root, i, stepAmount,runga_step):
 
     ax.scatter(runga_x, runga_y,color='r')
     ax.plot(sol_x, sol_y, color='g')
-    ax.set_title("Solution: " + AppGUI.equations[i])
+    ax.set_title("Solution of " + AppGUI.equations[i])
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_ylim([-5, 5])
     canvas = FigureCanvasTkAgg(fig, newWindow)  # A tk.DrawingArea.
     canvas.get_tk_widget().pack(side=tkinter.TOP)
-    newWindow.after(delay, lambda: updatePlot(ax, X, FX, canvas, newWindow, i, stepAmount, runga_step))
+
+    newWindow.after(delay, lambda: updatePlot(ax, X, FX, canvas, newWindow, i, stepAmount, runga_step, hLabel))
     newWindow.mainloop()

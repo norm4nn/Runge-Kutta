@@ -2,7 +2,11 @@ import tkinter
 import functionChartWindow
 import matplotlib
 
-equations = ["y' = y - x^2, y(0) = 1", "y' = x^2*y^2*sin(x)-2y/x, y(0) = 0.1", "y' = sin(x), y(pi/2) = 0", "y' = sin(x)cos(x)-ycos(x), y(0) = 0"]
+equations = ["y' = y - x^2, y(0) = 1",
+             "y' = y + x^2, y(-2) = e^(-2) - 2",
+             "y' = sin(x), y(pi/2) = 0",
+             "y' = sin(x)cos(x)-ycos(x), y(0) = 0",
+             "y' = y^2 * x, y(-5) = -2/26"]
 
 root = tkinter.Tk()
 root.geometry('450x500')
