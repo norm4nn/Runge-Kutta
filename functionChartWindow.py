@@ -83,6 +83,7 @@ def cm_to_inch(value):
 
 def openNewChart(root, i, stepAmount,runga_step):
     # h = float(h)
+    runga_step=float(runga_step)
     stepAmount = int(stepAmount)
     newWindow = tkinter.Toplevel(root)
     newWindow.geometry("1280x720")
@@ -107,10 +108,9 @@ def openNewChart(root, i, stepAmount,runga_step):
     sol_x = calculate_solution(stepAmount, i,0.01,X)[0]#stepamount przedział
     sol_y = calculate_solution(stepAmount, i,0.01,X)[1]
 
-    runga_step = 1
     runga_x = calculate_runge_kutta(runga_step,i,stepAmount,X,FX)[0]
     runga_y = calculate_runge_kutta(runga_step,i,stepAmount,X,FX)[1]
-
+    print(functions.solutions[0](-2))
 
 
 

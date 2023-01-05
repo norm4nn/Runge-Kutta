@@ -2,10 +2,9 @@ import math
 
 
 def f0(x, y):
-    return y - x**2
-
+    return x-y-4
 def f0_sol(x):
-    return -math.exp(x)+(x**2)+(2*x)+2
+    return 1/math.exp(x)+x-5
 
 def f1(x, y):
     return y + x**2
@@ -34,5 +33,5 @@ def f4_sol(x):
 
 functions = [f0, f1, f2, f3, f4]
 solutions=[f0_sol,f1_sol,f2_sol,f3_sol, f4_sol]
-conditions = [(0, 1), (-2, math.e**(-2) -2), (math.pi/2, 0), (0, 0), (-5, -(2/26))]
+conditions = [(-2, f0_sol(-2)), (-2, math.e**(-2) -2), (math.pi/2, 0), (0, 0), (-5, -(2/26))]
 

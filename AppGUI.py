@@ -2,7 +2,7 @@ import tkinter
 import functionChartWindow
 import matplotlib
 
-equations = ["y' = y - x^2, y(0) = 1",
+equations = ["y' = x-y-4, y(-2) = 0.39",
              "y' = y + x^2, y(-2) = e^(-2) - 2",
              "y' = sin(x), y(pi/2) = 0",
              "y' = sin(x)cos(x)-ycos(x), y(0) = 0",
@@ -10,12 +10,12 @@ equations = ["y' = y - x^2, y(0) = 1",
 
 root = tkinter.Tk()
 root.geometry('450x500')
-root.title("Select equation")
+root.title("Runge-Kutta")
 
 spinnerState = "normal"
 
 def runChartWindow(whichEquation,stepAmount, starting_step):
-    functionChartWindow.openNewChart(root, whichEquation.get(), stepAmount.get(), starting_step)
+    functionChartWindow.openNewChart(root, whichEquation.get(), stepAmount.get(), starting_step.get())
 
 
 def toggleNumberOfStepsSpinnerStatus(spinner):
@@ -32,7 +32,6 @@ def toggleNumberOfStepsSpinnerStatus(spinner):
 def initApp():
     varWhich = tkinter.IntVar()
     varLength = tkinter.StringVar()
-    varReduce = tkinter.StringVar()
     varAmount = tkinter.StringVar()
 
     for i, equation in enumerate(equations):
@@ -42,9 +41,10 @@ def initApp():
 
     firstLine = tkinter.Frame(root)
     tkinter.Label(firstLine, text="Length of runge-kutta the step (h):").pack(side=tkinter.LEFT,   expand=True)
-    stepLengthSpinner = tkinter.Spinbox(firstLine, from_=10, to=20, value=10, textvariable=varLength)
+    stepLengthSpinner = tkinter.Spinbox(firstLine, from_=1, to=10, value=3, textvariable=varLength)
     stepLengthSpinner.pack(side=tkinter.LEFT,   expand=True)
     firstLine.pack(side=tkinter.TOP, pady=20)
+
 
 
 
@@ -58,7 +58,7 @@ def initApp():
 
 
     subimtBtn = tkinter.Button(root, text="Select equation",
-                               command=lambda: runChartWindow(varWhich, varAmount,varLength ))
+                               command=lambda: runChartWindow(varWhich, varAmount,varLength))
     subimtBtn.pack(side=tkinter.BOTTOM, pady=20)
 
     root.mainloop()
