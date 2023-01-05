@@ -9,19 +9,17 @@ import numpy as np
 import AppGUI
 import functions
 
-
-delay = 400#miliseconds
+delay = 400  # miliseconds
+sol_x=[]
+sol_y=[]
 
 
 def updatePlot(ax, X, FX, canvas, window, i, stepAmount, runga_step, hLabel):
-    if(runga_step<=0.001):
+    if (runga_step <= 0.001):
         return
     X = functions.conditions[i][0]  # waruenk poczatkowy
     FX = functions.conditions[i][1]
 
-    # rozwiazanie wayliczone
-    sol_x = calculate_solution(stepAmount, i, 0.01, X)[0]  # stepamount przedział
-    sol_y = calculate_solution(stepAmount, i, 0.01, X)[1]
 
     runga_x = calculate_runge_kutta(runga_step, i, stepAmount, X, FX)[0]
     runga_y = calculate_runge_kutta(runga_step, i, stepAmount, X, FX)[1]
@@ -33,57 +31,59 @@ def updatePlot(ax, X, FX, canvas, window, i, stepAmount, runga_step, hLabel):
     ax.scatter(runga_x, runga_y, color='r', label='Values from Runge-Kutta method')
     ax.plot(sol_x, sol_y, color='g', label='Real values')
     ax.set_ylim([-5, 5])
-    runga_step/=1.25
+    runga_step /= 1.25
     hLabel.config(text="Length of the step (h): " + str(runga_step))
     ax.legend()
     canvas.draw()
 
-
-    window.after(delay, lambda: updatePlot(ax, X, FX, canvas, window, i,stepAmount,runga_step, hLabel))
+    window.after(delay, lambda: updatePlot(ax, X, FX, canvas, window, i, stepAmount, runga_step, hLabel))
 
 
 def rungeKuttaMethod(x, y, h, i):
-    k1 = h*functions.functions[i](x,y)
-    k2 = h*functions.functions[i](x + h/2,y + k1/2)
-    k3 = h*functions.functions[i](x + h/2,y + k2/2)
-    k4 = h*functions.functions[i](x + h,y + k3)
+    k1 = h * functions.functions[i](x, y)
+    k2 = h * functions.functions[i](x + h / 2, y + k1 / 2)
+    k3 = h * functions.functions[i](x + h / 2, y + k2 / 2)
+    k4 = h * functions.functions[i](x + h, y + k3)
 
-    deltaY = (1/6) * (k1 + 2*k2 + 2*k3 + k4)
+    deltaY = (1 / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
     return y + deltaY
 
-def calculate_runge_kutta(step,function_number,number_of_steps,start_x,start_y):
+
+def calculate_runge_kutta(step, function_number, number_of_steps, start_x, start_y):
     fx = start_y
     x = start_x
-    x_list=[]
-    y_list=[]
+    x_list = []
+    y_list = []
 
     while x <= number_of_steps:
         x_list.append(x)
-        current_y=rungeKuttaMethod(x,fx,step,function_number)
+        current_y = rungeKuttaMethod(x, fx, step, function_number)
         y_list.append(current_y)
-        fx=current_y
+        fx = current_y
         x += step
 
     return x_list, y_list
 
-def calculate_solution(number_of_steps,function_number,step,start_x):
-    fx=[]
-    x=[]
-    current_x=start_x
-    while current_x<=number_of_steps:
+
+def calculate_solution(number_of_steps, function_number, step, start_x):
+    fx = []
+    x = []
+    current_x = start_x
+    while current_x <= number_of_steps:
         x.append(current_x)
         fx.append(functions.solutions[function_number](current_x))
-        # print(functions.solutions[function_number](current_x))
-        current_x+=step
+        current_x += step
 
     return x, fx
 
-def cm_to_inch(value):
-    return value/2.54
 
-def openNewChart(root, i, stepAmount,runga_step):
+def cm_to_inch(value):
+    return value / 2.54
+
+
+def openNewChart(root, i, stepAmount, runga_step):
     # h = float(h)
-    runga_step=float(runga_step)
+    runga_step = float(runga_step)
     stepAmount = int(stepAmount)
     newWindow = tkinter.Toplevel(root)
     newWindow.geometry("1280x720")
@@ -92,32 +92,29 @@ def openNewChart(root, i, stepAmount,runga_step):
     hLabel = tkinter.Label(newWindow)
     hLabel.pack(side='bottom')
 
+    screen_width = root.winfo_screenmmwidth() // 10
+    screen_height = root.winfo_screenmmheight() // 10
 
+    screen_height //= 1.5
+    screen_width //= 1.5
 
-    screen_width = root.winfo_screenmmwidth()//10
-    screen_height = root.winfo_screenmmheight()//10
-
-    screen_height//=1.5
-    screen_width//=1.5
-
-
-    X = functions.conditions[i][0]#waruenk poczatkowy
+    X = functions.conditions[i][0]  # waruenk poczatkowy
     FX = functions.conditions[i][1]
 
     # rozwiazanie wayliczone
-    sol_x = calculate_solution(stepAmount, i,0.01,X)[0]#stepamount przedział
-    sol_y = calculate_solution(stepAmount, i,0.01,X)[1]
+    global sol_x
+    global sol_y
+    sol_x = calculate_solution(stepAmount, i, 0.01, X)[0]  # stepamount przedział
+    sol_y = calculate_solution(stepAmount, i, 0.01, X)[1]
 
-    runga_x = calculate_runge_kutta(runga_step,i,stepAmount,X,FX)[0]
-    runga_y = calculate_runge_kutta(runga_step,i,stepAmount,X,FX)[1]
+    runga_x = calculate_runge_kutta(runga_step, i, stepAmount, X, FX)[0]
+    runga_y = calculate_runge_kutta(runga_step, i, stepAmount, X, FX)[1]
     print(functions.solutions[0](-2))
 
-
-
-    fig = matplotlib.figure.Figure(figsize=(cm_to_inch(screen_width),cm_to_inch(screen_height)))
+    fig = matplotlib.figure.Figure(figsize=(cm_to_inch(screen_width), cm_to_inch(screen_height)))
     ax = fig.add_subplot()
 
-    ax.scatter(runga_x, runga_y,color='r')
+    ax.scatter(runga_x, runga_y, color='r')
     ax.plot(sol_x, sol_y, color='g')
     ax.set_title("Solution of " + AppGUI.equations[i])
     ax.set_xlabel("x")
