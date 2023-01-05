@@ -25,13 +25,13 @@ def f3_sol(x):
     return math.sin(x)+1/(math.exp(math.sin(x)))-1
 
 def f4(x, y):
-    return x*(y**2)
+    return x**2 + x - y - 5
 
 def f4_sol(x):
-    return -(2/((x**2) + 1))
+    return math.exp(-x) + x**2 - x - 4
 
 
 functions = [f0, f1, f2, f3, f4]
 solutions=[f0_sol,f1_sol,f2_sol,f3_sol, f4_sol]
-conditions = [(-2, f0_sol(-2)), (-2, math.e**(-2) -2), (math.pi/2, 0), (0, 0), (-5, -(2/26))]
+conditions = [(-2, f0_sol(-2)), (-2, math.e**(-2) -2), (math.pi/2, 0), (0, 0), (-5, f4_sol(-5))]
 
